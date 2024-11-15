@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>Candidatos da Empresa</h2>
+    <h1>Lista de Candidatos</h1>
     <div>
       <h3>Não Contratados</h3>
       <ul>
@@ -10,7 +10,8 @@
           <a :href="candidato.github" target="_blank">GitHub</a>
         </li>
       </ul>
-
+    </div>
+    <div>
       <h3>Contratados</h3>
       <ul>
         <li v-for="candidato in candidatosContratados" :key="candidato.id">
@@ -35,9 +36,10 @@ const empresaId = route.params.empresaId;
 
 const fetchCandidatos = async () => {
   try {
-    const response = await apiClient.get(`/empresas/${empresaId}/candidatos`);
-    candidatosNaoContratados.value = response.data.filter(c => c.status === 'não contratado');
-    candidatosContratados.value = response.data.filter(c => c.status === 'contratado');
+    const response = await apiClient.get(`/empresas/${empresaId}`);
+    const candidatos = response.data.candidatos;
+    candidatosNaoContratados.value = candidatos.filter(c => c.status === 'não contratado');
+    candidatosContratados.value = candidatos.filter(c => c.status === 'contratado');
   } catch (error) {
     console.error('Erro ao buscar candidatos:', error);
   }
