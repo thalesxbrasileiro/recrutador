@@ -18,10 +18,10 @@
         <input v-model="habilidades" type="text" id="habilidades" />
   
         <label for="linkedin">LinkedIn:</label>
-        <input v-model="candidato.linkedin" type="url" id="linkedin" />
+        <input v-model="candidato.linkedin" type="text" id="linkedin" />
   
         <label for="github">GitHub:</label>
-        <input v-model="candidato.github" type="url" id="github" />
+        <input v-model="candidato.github" type="text" id="github" />
   
         <label for="status">Status:</label>
         <select v-model="candidato.status" id="status" required>
