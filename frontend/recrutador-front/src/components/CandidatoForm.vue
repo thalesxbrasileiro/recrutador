@@ -90,15 +90,15 @@ export default {
         }
         router.push({ name: 'CandidatoList' });
       } catch (error) {
-        // console.error('Erro ao salvar candidato:', error);
-        // alert('Erro ao salvar candidato.');
+        console.error('Erro ao salvar candidato:', error);
+        alert('Erro ao salvar candidato.');
       }
     };
 
     const fetchCandidato = async () => {
       if (route.params.candidatoId) {
         isEditing.value = true;
-        const response = await apiClient.get(`/candidatos/${route.params.candidatoId}`);
+        const response = await apiClient.get(`/empresas/${route.params.empresaId}/candidatos/${route.params.candidatoId}`);
         candidato.value = response.data;
         habilidades.value = candidato.value.habilidades.join(', ');
         selectedEmpresa.value = candidato.value.empresaId; // Define o ID da empresa selecionada

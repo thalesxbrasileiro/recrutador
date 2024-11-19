@@ -12,7 +12,6 @@ router.delete("/:id", empresaController.deletarEmpresa);
 // Rotas para Candidatos
 router.post("/:empresaId/candidatos", empresaController.adicionarCandidato);
 router.get("/:empresaId/candidatos/status", empresaController.obterCandidatosPorStatus);
-
 router.get("/:empresaId/candidatos/:candidatoId", empresaController.obterCandidatoPorId); 
 router.put("/:empresaId/candidatos/:candidatoId", empresaController.atualizarCandidato);
 router.delete("/:empresaId/candidatos/:candidatoId", empresaController.deletarCandidato); 

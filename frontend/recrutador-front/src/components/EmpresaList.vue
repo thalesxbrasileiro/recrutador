@@ -1,12 +1,29 @@
 <template>
   <div class="list-container">
-    <h2>Empresas</h2>
-    <ul>
-      <li v-for="empresa in empresas" :key="empresa.id" class="empresa-item">
-        <span>{{ empresa.nome }}</span>
-        <button @click="getCandidatos(empresa.id)">Ver Candidatos</button>
-      </li>
-    </ul>
+    <h1>Empresas Cadastradas</h1>
+    <div v-if="empresas.length" class="empresa-section">
+      <table class="empresa-table">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="empresa in empresas" :key="empresa.id">
+            <td>{{ empresa.nome }}</td>
+            <td>
+              <i class="fas fa-eye" @click="viewCandidatos(empresa.id)"></i>
+              <i class="fas fa-edit" @click="editEmpresa(empresa.id)"></i>
+              <i class="fas fa-trash" @click="deleteEmpresa(empresa.id)"></i>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div v-else>
+      <p>Nenhuma empresa encontrada.</p>
+    </div>
   </div>
 </template>
 
@@ -27,8 +44,23 @@ const fetchEmpresas = async () => {
   }
 };
 
-const getCandidatos = (empresaId) => {
+const viewCandidatos = (empresaId) => {
   router.push({ name: 'CandidatoList', params: { empresaId } });
+};
+
+const editEmpresa = (empresaId) => {
+  router.push({ name: 'EmpresaForm', params: { empresaId } });
+};
+
+const deleteEmpresa = async (empresaId) => {
+  try {
+    console.log(`Tentando deletar empresa com ID: ${empresaId}`);
+    await apiClient.delete(`/empresas/${empresaId}`);
+    console.log(`Empresa com ID: ${empresaId} deletada com sucesso`);
+    fetchEmpresas(); // Atualiza a lista de empresas após a exclusão
+  } catch (error) {
+    console.error('Erro ao deletar empresa:', error);
+  }
 };
 
 onMounted(fetchEmpresas);
@@ -36,7 +68,7 @@ onMounted(fetchEmpresas);
 
 <style scoped>
 .list-container {
-  max-width: 800px;
+  max-width: 1000px;
   margin: 0 auto;
   padding: 20px;
   background-color: #ffffff;
@@ -44,29 +76,50 @@ onMounted(fetchEmpresas);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-h2 {
+h1 {
   color: #007BFF;
   margin-bottom: 20px;
+  text-align: center;
 }
 
-ul {
-  list-style-type: none;
-  padding: 0;
+.empresa-section {
+  margin-bottom: 30px;
 }
 
-.empresa-item {
-  background-color: #f9f9f9;
-  margin-bottom: 10px;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.empresa-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.empresa-item span {
+.empresa-table th, .empresa-table td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: center;
+}
+
+.empresa-table th {
+  background-color: #007BFF;
+  color: white;
   font-weight: bold;
+}
+
+.empresa-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.fas {
+  cursor: pointer;
+  margin: 0 5px;
+  color: #007BFF;
+  transition: color 0.3s ease;
+}
+
+.fas:hover {
+  color: #0056b3;
 }
 
 button {
