@@ -124,7 +124,7 @@ onMounted(fetchCandidatos);
 
 <style scoped>
 .list-container {
-  max-width: 1000px;
+  width: 90%;
   margin: 0 auto;
   padding: 20px;
   background-color: #ffffff;
@@ -174,6 +174,18 @@ h1 {
   object-fit: cover;
 }
 
+.nome-column {
+  width: 20%;
+}
+
+.contatos-column {
+  width: 20%;
+}
+
+.data-column {
+  width: 10%;
+}
+
 .edit-input {
   width: 100%;
   padding: 10px;
@@ -181,6 +193,7 @@ h1 {
   border-radius: 8px;
   box-sizing: border-box;
   font-size: 14px;
+  margin-bottom: 5px;
 }
 
 .edit-input:focus {
