@@ -60,7 +60,7 @@ const saveEmpresa = async (empresa) => {
   try {
     await apiClient.put(`/empresas/${empresa.id}`, { nome: empresa.nome });
     empresa.isEditing = false;
-    fetchEmpresas(); // Atualiza a lista de empresas após a edição
+    fetchEmpresas();
   } catch (error) {
     console.error('Erro ao salvar empresa:', error);
   }
@@ -71,7 +71,7 @@ const deleteEmpresa = async (empresaId) => {
     console.log(`Tentando deletar empresa com ID: ${empresaId}`);
     await apiClient.delete(`/empresas/${empresaId}`);
     console.log(`Empresa com ID: ${empresaId} deletada com sucesso`);
-    fetchEmpresas(); // Atualiza a lista de empresas após a exclusão
+    fetchEmpresas(); 
   } catch (error) {
     console.error('Erro ao deletar empresa:', error);
   }

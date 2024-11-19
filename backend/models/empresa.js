@@ -2,10 +2,10 @@ class Empresa {
     constructor(id, nome) {
         this.id = id;
         this.nome = nome;
-        this.candidatos = [];  // Armazena candidatos monitorados pela empresa
+        this.candidatos = [];  
     }
 }
 
-const empresas = []; // Simulação de banco de dados em memória
+const empresas = [];
 
 module.exports = { Empresa, empresas };

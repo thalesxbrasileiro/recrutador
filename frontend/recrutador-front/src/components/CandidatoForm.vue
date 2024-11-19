@@ -66,7 +66,7 @@ export default {
       github: '',
       status: 'não contratado',
       dataContratacao: '',
-      empresaId: '' // Adiciona o campo empresaId
+      empresaId: ''
     });
 
     const habilidades = ref('');
@@ -78,7 +78,7 @@ export default {
 
     const handleSubmit = async () => {
       candidato.value.habilidades = habilidades.value.split(',').map(h => h.trim());
-      candidato.value.empresaId = selectedEmpresa.value; // Define o ID da empresa selecionada
+      candidato.value.empresaId = selectedEmpresa.value; 
       try {
         if (isEditing.value) {
           await apiClient.put(`/empresas/${selectedEmpresa.value}/candidatos/${route.params.candidatoId}`, candidato.value);
@@ -91,7 +91,6 @@ export default {
         router.push({ name: 'CandidatoList' });
       } catch (error) {
         console.error('Erro ao salvar candidato:', error);
-        // alert('Erro ao salvar candidato.');
       }
     };
 
@@ -101,7 +100,7 @@ export default {
         const response = await apiClient.get(`/empresas/${route.params.empresaId}/candidatos/${route.params.candidatoId}`);
         candidato.value = response.data;
         habilidades.value = candidato.value.habilidades.join(', ');
-        selectedEmpresa.value = candidato.value.empresaId; // Define o ID da empresa selecionada
+        selectedEmpresa.value = candidato.value.empresaId; 
       }
     };
 

@@ -70,7 +70,6 @@ const obterCandidatosPorStatus = (req, res) => {
     res.json(candidatos);
 };
 
-// Função para obter um candidato específico por ID
 const obterCandidatoPorId = (req, res) => {
 
     const { empresaId, candidatoId } = req.params;
@@ -88,7 +87,6 @@ const obterCandidatoPorId = (req, res) => {
     res.json(candidato);
 };
 
-// Função para atualizar os dados de um candidato
 const atualizarCandidato = (req, res) => {
     const { empresaId, candidatoId } = req.params;
     const { nome, foto, contatos, habilidades, linkedin, github, status, dataContratacao } = req.body;
@@ -103,7 +101,6 @@ const atualizarCandidato = (req, res) => {
         return res.status(404).json({ error: "Candidato não encontrado" });
     }
 
-    // Atualiza as propriedades do candidato
     candidato.nome = nome || candidato.nome;
     candidato.foto = foto || candidato.foto;
     candidato.contatos = contatos || candidato.contatos;
@@ -116,7 +113,6 @@ const atualizarCandidato = (req, res) => {
     res.json(candidato);
 };
 
-// Função para deletar um candidato
 const deletarCandidato = (req, res) => {
     const { empresaId, candidatoId } = req.params;
     

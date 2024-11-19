@@ -97,7 +97,7 @@ const saveCandidato = async (candidato) => {
     await apiClient.put(`/empresas/${empresaId}/candidatos/${candidato.id}`, candidato);
     console.log(`Candidato com ID: ${candidato.id} salvo com sucesso`);
     candidato.isEditing = false;
-    fetchCandidatos(); // Atualiza a lista de candidatos após a edição
+    fetchCandidatos();
   } catch (error) {
     console.error('Erro ao salvar candidato:', error);
   }
@@ -108,7 +108,7 @@ const deleteCandidato = async (candidatoId) => {
     console.log(`Tentando deletar candidato com ID: ${candidatoId}`);
     await apiClient.delete(`/empresas/${empresaId}/candidatos/${candidatoId}`);
     console.log(`Candidato com ID: ${candidatoId} deletado com sucesso`);
-    fetchCandidatos(); // Atualiza a lista de candidatos após a exclusão
+    fetchCandidatos(); 
   } catch (error) {
     console.error('Erro ao deletar candidato:', error);
   }
