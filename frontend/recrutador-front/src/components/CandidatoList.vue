@@ -18,16 +18,44 @@
         </thead>
         <tbody>
           <tr v-for="candidato in candidatos" :key="candidato.id">
-            <td><img :src="candidato.foto" alt="Foto do candidato" class="candidato-foto" /></td>
-            <td>{{ candidato.nome }}</td>
-            <td>{{ candidato.contatos }}</td>
-            <td>{{ candidato.habilidades.join(', ') }}</td>
-            <td>{{ candidato.status }}</td>
-            <td>{{ formatDate(candidato.dataContratacao) }}</td>
-            <td><a :href="candidato.linkedin" target="_blank">LinkedIn</a></td>
-            <td><a :href="candidato.github" target="_blank">GitHub</a></td>
             <td>
-              <i class="fas fa-edit" @click="editCandidato(candidato.id)"></i>
+              <img v-if="!candidato.isEditing" :src="candidato.foto" alt="Foto do candidato" class="candidato-foto" />
+              <input v-else type="text" v-model="candidato.foto" class="edit-input" />
+            </td>
+            <td>
+              <span v-if="!candidato.isEditing">{{ candidato.nome }}</span>
+              <input v-else type="text" v-model="candidato.nome" class="edit-input" />
+            </td>
+            <td>
+              <span v-if="!candidato.isEditing">{{ candidato.contatos }}</span>
+              <input v-else type="text" v-model="candidato.contatos" class="edit-input" />
+            </td>
+            <td>
+              <span v-if="!candidato.isEditing">{{ candidato.habilidades.join(', ') }}</span>
+              <input v-else type="text" v-model="candidato.habilidades" class="edit-input" />
+            </td>
+            <td>
+              <span v-if="!candidato.isEditing">{{ candidato.status }}</span>
+              <select v-else v-model="candidato.status" class="edit-input">
+                <option value="não contratado">Não Contratado</option>
+                <option value="contratado">Contratado</option>
+              </select>
+            </td>
+            <td>
+              <span v-if="!candidato.isEditing">{{ formatDate(candidato.dataContratacao) }}</span>
+              <input v-else type="date" v-model="candidato.dataContratacao" class="edit-input" />
+            </td>
+            <td>
+              <a v-if="!candidato.isEditing" :href="candidato.linkedin" target="_blank">LinkedIn</a>
+              <input v-else type="text" v-model="candidato.linkedin" class="edit-input" />
+            </td>
+            <td>
+              <a v-if="!candidato.isEditing" :href="candidato.github" target="_blank">GitHub</a>
+              <input v-else type="text" v-model="candidato.github" class="edit-input" />
+            </td>
+            <td>
+              <i v-if="!candidato.isEditing" class="fas fa-edit" @click="toggleEdit(candidato)"></i>
+              <i v-else class="fas fa-save" @click="saveCandidato(candidato)"></i>
               <i class="fas fa-trash" @click="deleteCandidato(candidato.id)"></i>
             </td>
           </tr>
@@ -53,14 +81,26 @@ const empresaId = route.params.empresaId;
 const fetchCandidatos = async () => {
   try {
     const response = await apiClient.get(`/empresas/${empresaId}`);
-    candidatos.value = response.data.candidatos;
+    candidatos.value = response.data.candidatos.map(candidato => ({ ...candidato, isEditing: false }));
   } catch (error) {
     console.error('Erro ao buscar candidatos:', error);
   }
 };
 
-const editCandidato = (candidatoId) => {
-  router.push({ name: 'CandidatoForm', params: { candidatoId, empresaId } });
+const toggleEdit = (candidato) => {
+  candidato.isEditing = !candidato.isEditing;
+};
+
+const saveCandidato = async (candidato) => {
+  try {
+    console.log(`Tentando salvar candidato com ID: ${candidato.id}`);
+    await apiClient.put(`/empresas/${empresaId}/candidatos/${candidato.id}`, candidato);
+    console.log(`Candidato com ID: ${candidato.id} salvo com sucesso`);
+    candidato.isEditing = false;
+    fetchCandidatos(); // Atualiza a lista de candidatos após a edição
+  } catch (error) {
+    console.error('Erro ao salvar candidato:', error);
+  }
 };
 
 const deleteCandidato = async (candidatoId) => {
@@ -132,6 +172,21 @@ h1 {
   height: 60px;
   border-radius: 50%;
   object-fit: cover;
+}
+
+.edit-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+.edit-input:focus {
+  border-color: #007BFF;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 
 .links a {

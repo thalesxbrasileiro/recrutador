@@ -11,11 +11,15 @@
         </thead>
         <tbody>
           <tr v-for="empresa in empresas" :key="empresa.id">
-            <td>{{ empresa.nome }}</td>
+            <td>
+              <span v-if="!empresa.isEditing">{{ empresa.nome }}</span>
+              <input v-else type="text" v-model="empresa.nome" class="edit-input" />
+            </td>
             <td>
               <i class="fas fa-eye" @click="viewCandidatos(empresa.id)"></i>
-              <i class="fas fa-edit" @click="editEmpresa(empresa.id)"></i>
+              <i class="fas fa-edit" @click="toggleEdit(empresa)"></i>
               <i class="fas fa-trash" @click="deleteEmpresa(empresa.id)"></i>
+              <i v-if="empresa.isEditing" class="fas fa-save" @click="saveEmpresa(empresa)"></i>
             </td>
           </tr>
         </tbody>
@@ -38,7 +42,7 @@ const router = useRouter();
 const fetchEmpresas = async () => {
   try {
     const response = await apiClient.get('/empresas');
-    empresas.value = response.data;
+    empresas.value = response.data.map(empresa => ({ ...empresa, isEditing: false }));
   } catch (error) {
     console.error('Erro ao buscar empresas:', error);
   }
@@ -48,8 +52,18 @@ const viewCandidatos = (empresaId) => {
   router.push({ name: 'CandidatoList', params: { empresaId } });
 };
 
-const editEmpresa = (empresaId) => {
-  router.push({ name: 'EmpresaForm', params: { empresaId } });
+const toggleEdit = (empresa) => {
+  empresa.isEditing = !empresa.isEditing;
+};
+
+const saveEmpresa = async (empresa) => {
+  try {
+    await apiClient.put(`/empresas/${empresa.id}`, { nome: empresa.nome });
+    empresa.isEditing = false;
+    fetchEmpresas(); // Atualiza a lista de empresas após a edição
+  } catch (error) {
+    console.error('Erro ao salvar empresa:', error);
+  }
 };
 
 const deleteEmpresa = async (empresaId) => {
@@ -109,6 +123,21 @@ h1 {
 
 .empresa-table tr:nth-child(even) {
   background-color: #f2f2f2;
+}
+
+.edit-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+.edit-input:focus {
+  border-color: #007BFF;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 
 .fas {

@@ -91,7 +91,7 @@ export default {
         router.push({ name: 'CandidatoList' });
       } catch (error) {
         console.error('Erro ao salvar candidato:', error);
-        alert('Erro ao salvar candidato.');
+        // alert('Erro ao salvar candidato.');
       }
     };
 
